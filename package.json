@@ -1,0 +1,23 @@
+{
+  "name": "seika-tg-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xHideakix/seika-tg-bot.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/xHideakix/seika-tg-bot/issues"
+  },
+  "homepage": "https://github.com/xHideakix/seika-tg-bot#readme",
+  "dependencies": {
+    "telegraf": "^3.36.0"
+  }
+}
