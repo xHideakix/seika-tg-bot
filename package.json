@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/xHideakix/seika-tg-bot#readme",
   "dependencies": {
+    "https-proxy-agent": "^5.0.0",
     "telegraf": "^3.36.0"
   }
 }
