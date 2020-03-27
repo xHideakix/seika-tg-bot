@@ -1,46 +1,27 @@
 const Telegraf = require('telegraf');
+const token = '930886942:AAGupiVd3KdVCKsVFCzEdUxbKSAW1xE5d3I';
+const bot = new Telegraf(token, {polling: true});
 
-let config = {
-    "token": "930886942:AAGupiVd3KdVCKsVFCzEdUxbKSAW1xE5d3I", 
-    "admin": 319423380 // id владельца бота
-};
+const notes = [];
 
-const bot = new Telegraf(config.token, {
+bot.onText(/напомни (.+) в (.+)/, function (msg, match) {
+    let userId = msg.from.id;
+    let text = match[1];
+    let time = match[2];
 
-    }
-);
+    notes.push({ 'uid': userId, 'time': time, 'text': text });
 
-let replyText = {
-    "helloAdmin": "Доброе утро, создатель. Чем могу помочь? ^^",
-    "helloUser":  "Приветствую, отправьте мне сообщение. Я передам его хозяину! *-*",
-    "replyWrong": "Для ответа пользователю используйте функцию Ответить/Reply."
-};
-
-let isAdmin = (userId) => {
-    return userId == config.admin;
-};
-
-let forwardToAdmin = (ctx) => {
-    if (isAdmin(ctx.message.from.id)) {
-        ctx.reply(replyText.replyWrong);
-    } else {
-        ctx.forwardMessage(config.admin, ctx.from.id, ctx.message.id);
-    }
-};
-
-bot.start((ctx) => {
-    ctx.reply(isAdmin(ctx.message.from.id)
-        ? replyText.helloAdmin
-        : replyText.helloUser);
+    bot.sendMessage(userId, 'Отлично! Я обязательно напомню, если не сдохну, хозяин *-*');
 });
 
-bot.on('message', (ctx) => {
-    if (ctx.message.reply_to_message
-        && ctx.message.reply_to_message.forward_from
-        && isAdmin(ctx.message.from.id)) {
-        ctx.telegram.sendCopy(ctx.message.reply_to_message.forward_from.id, ctx.message);
-    } else {
-        forwardToAdmin(ctx);
+setInterval(function(){
+    for (let i = 0; i < notes.length; i++) {
+    const curDate = new Date().getHours() + ':' + new Date().getMinutes();
+    if (notes[i]['time'] === curDate) {
+        bot.sendMessage(notes[i]['uid'], 'Напоминаю, что вы должны: '+ notes[i]['text'] + ' сейчас.');
+        notes.splice(i, 1);
     }
-});
+    }
+}, 1000);
+
 bot.launch();
